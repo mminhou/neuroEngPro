@@ -1,6 +1,6 @@
 # NeuroEngPro
 
-## # Requirement package
+## Requirement package
 ### $ pip install tk
 ### $ pip install pillow
 
