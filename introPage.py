@@ -10,7 +10,7 @@ class IntroPage(tk.Frame):
         # self.canvas.place(x=0, y=0, relwidth=1, relheight=1)
         self.canvas.pack(fill="both", expand=True)
         self.sequence = [ImageTk.PhotoImage(img) for img in ImageSequence.Iterator(
-            Image.open(r'factory/original2.gif')
+            Image.open(r'factory/image/original2.gif')
         )]
         # self.image = self.canvas.create_image(0, 0, image=self.sequence[0], anchor="nw")
         self.image = self.canvas.create_image(720, 400, image=self.sequence[0])
@@ -21,13 +21,13 @@ class IntroPage(tk.Frame):
         self.canvas.create_text(700, 200, text="Fucking Neuro Engineering", font=("Helvetica", 80, 'bold'), fill="Black")
 
         # Intro Graph Button
-        self.graphBtn = tk.PhotoImage(file='factory/graphButton.png')
+        self.graphBtn = tk.PhotoImage(file='factory/image/graphButton.png')
         graphButton = tk.Button(self, image=self.graphBtn,  borderwidth=0, highlightthickness=0,
                             command=lambda: controller.show_frame("GraphPage"))
         self.canvas.create_window(400, 700, window=graphButton)
 
         # Intro Start Button
-        self.startBtn = tk.PhotoImage(file='factory/startButton.png')
+        self.startBtn = tk.PhotoImage(file='factory/image/startButton.png')
         startButton = tk.Button(self, image=self.startBtn, borderwidth=0, highlightthickness=0,
                             command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1030, 700, window=startButton)

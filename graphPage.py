@@ -6,7 +6,7 @@ class GraphPage(tk.Frame):
         self.controller = controller
 
 
-        self.graphWall = tk.PhotoImage(file='factory/graphSampleImage2.png')
+        self.graphWall = tk.PhotoImage(file='factory/image/graphSampleImage2.png')
         # Wallpaper
         self.canvas = tk.Canvas(self, width=800, height=600, bg='white')
         self.canvas.pack(fill="both", expand=True)
@@ -18,7 +18,7 @@ class GraphPage(tk.Frame):
         self.image = self.canvas.create_image(740, 500, image=self.graphWall)
 
         # Previous Button
-        self.backBtn = tk.PhotoImage(file='factory/exitButton.png')
+        self.backBtn = tk.PhotoImage(file='factory/image/exitButton.png')
         # self.graphBtn = self.graphBtn.subsample(4, 4) # Resizing button
         backButton = tk.Button(self, image=self.backBtn,
                                borderwidth=0, highlightthickness=0,

@@ -5,10 +5,10 @@ class Level2Page(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.backBtn = tk.PhotoImage(file='factory/backButton.png')
-        self.goImage = tk.PhotoImage(file='factory/go2.png')
-        self.nogoImage = tk.PhotoImage(file='factory/nogo2.png')
-        self.exitImage = tk.PhotoImage(file='factory/exit2.png')
+        self.backBtn = tk.PhotoImage(file='factory/image/backButton.png')
+        self.goImage = tk.PhotoImage(file='factory/image/go2.png')
+        self.nogoImage = tk.PhotoImage(file='factory/image/nogo2.png')
+        self.exitImage = tk.PhotoImage(file='factory/image/exit2.png')
 
         # Level2 Canvas
         self.canvas = tk.Canvas(self, width=1600, height=1200)
@@ -39,7 +39,7 @@ class Level2Page(tk.Frame):
                     self.canvas.create_image(c * 85 + 420, r * 85 + 160, image=self.exitImage)
 
         # Previous Button
-        self.backBtn = tk.PhotoImage(file='factory/exitButton2.png')
+        self.backBtn = tk.PhotoImage(file='factory/image/exitButton2.png')
         # self.graphBtn = self.graphBtn.subsample(4, 4) # Resizing button
         backButton = tk.Button(self, image=self.backBtn,
                                 borderwidth=0, highlightthickness=0,
