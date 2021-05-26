@@ -6,6 +6,7 @@ class Level1Page(tk.Frame):
         self.controller = controller
 
         self.backBtn = tk.PhotoImage(file='factory/image/backButton.png')
+        self.player = tk.PhotoImage(file='factory/image/player.png')
         self.goImage = tk.PhotoImage(file='factory/image/go1.png')
         self.nogoImage = tk.PhotoImage(file='factory/image/nogo1.png')
         self.exitImage = tk.PhotoImage(file='factory/image/exit1.png')
@@ -22,18 +23,46 @@ class Level1Page(tk.Frame):
             [0, 0, 1, 3],
             [0, 1, 1, 0],
             [1, 1, 0, 0],
-            [1, 0, 0, 0],
+            [2, 1, 0, 0],
         ]
+        self.srcX = 0
+        self.srcY = 0
+        self.posX = 0
+        self.posY = 0
 
         for r in range(4):
             for c in range(4):
+                # Path
                 if self.gameMap[r][c] == 1:
                     self.canvas.create_image(c * 170 + 470, r * 170 + 200, image=self.goImage)
                     # self.canvas.create_rectangle(c*50, r*50, c*50+50, r*50+50, fill='green' )
+                # Non Path
                 elif self.gameMap[r][c] == 0:
                     self.canvas.create_image(c * 170 + 470, r * 170 + 200, image=self.nogoImage)
+                # Destination
                 elif self.gameMap[r][c] == 3:
                     self.canvas.create_image(c * 170 + 470, r * 170 + 200, image=self.exitImage)
+                # Player
+                elif self.gameMap[r][c] == 2:
+                    self.srcX = c * 170 + 470
+                    self.srcY = r * 170 + 200
+                    self.posX = c
+                    self.posY = r
+                    # self.player = Player(self.canvas, c * 170 + 470, r * 170 + 200)
+                    # self.canvas.create_image(c * 170 + 470, r * 170 + 200, image=self.player)
+
+
+
+        # create player (200, 200)
+        self.player = Player(self.canvas, self.srcX, self.srcY)
+        self.canvas.focus_set()
+        self.canvas.bind('<Left>', lambda _: self.leftSide())
+        self.canvas.bind('<Right>',
+                         lambda _: self.rightSide())
+        self.canvas.bind('<Up>',
+                         lambda _: self.upSide())
+        self.canvas.bind('<Down>',
+                         lambda _: self.downSide())
 
         # Previous Button
         self.backBtn = tk.PhotoImage(file='factory/image/exitButton2.png')
@@ -42,4 +71,71 @@ class Level1Page(tk.Frame):
                                borderwidth=0, highlightthickness=0,
                                   command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1375, 60, window=backButton)
+
+    def isCollide(self):
+        if self.posX < 0:
+            return True
+        if self.posX >= 4:
+            return True
+        if self.posY < 0:
+            return True
+        if self.posY >= 4:
+            return True
+        if self.gameMap[self.posY][self.posX] == 0:
+            return True
+        return False
+
+    def leftSide(self):
+        self.posX -= 1
+        if self.isCollide():
+            gself.posX += 1
+        else:
+            self.player.move(-170, 0)
+
+    def rightSide(self):
+        self.posX += 1
+        if self.isCollide():
+            self.posX -= 1
+        else:
+            self.player.move(170, 0)
+
+    def upSide(self):
+        self.posY -= 1
+        if self.isCollide():
+            self.posY += 1
+        else:
+            self.player.move(0, -170)
+
+    def downSide(self):
+        self.posY += 1
+        if self.isCollide():
+            self.posY -= 1
+        else:
+            self.player.move(0, 170)
+
+class MoveObject:
+    def __init__(self, canvas, item):
+        self.canvas = canvas
+        self.item = item
+
+    def move(self, x, y):
+        self.canvas.move(self.item, x, y)
+        print("moving")
+        # print("moving")
+        # print(px, py)
+        # if self.gmap[py][px] == 0:
+        #     print("nogo")
+        # elif self.gmap[py][px] == 1:
+        #     print("go")
+        #     self.canvas.move(self.item, x, y)
+        # elif self.gmap[py][px] == 3:
+        #     print("complete")
+        #     self.canvas.move(self.item, x, y)
+
+
+class Player(MoveObject):
+    def __init__(self, canvas, x, y):
+        self.pImage = tk.PhotoImage(file='factory/image/player.png')
+        self.player = canvas.create_image(x, y, image=self.pImage)
+        super(Player, self).__init__(canvas, self.player)
 

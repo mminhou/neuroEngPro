@@ -1,14 +1,15 @@
 import pandas as pd
 import time
 
-FP2_FILENAME = 'factory/data/Fp2_FFT.txt'
+def process(filename):
+    FP2_FILENAME = filename
 
-data = pd.read_csv(FP2_FILENAME, sep="\t", encoding='cp949')
-dataSample = data.loc[:, ['7.00Hz', '9.00Hz', '11.00Hz', '13.00Hz']]
+    while(1):
+        data = pd.read_csv(FP2_FILENAME, sep="\t", encoding='cp949')
+        extractData = data.loc[:, ['7.00Hz', '9.00Hz', '11.00Hz', '13.00Hz']]
+        if extractData.tail() == dataSample:
+            break
 
-print(data)
-print(dataSample)
-
-while(1):
-    print(dataSample.tail())
-    time.sleep(3)
+        dataSample = extractData.tail()
+        time.sleep(3)
+        print(dataSample)
