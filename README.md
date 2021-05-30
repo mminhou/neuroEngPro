@@ -6,7 +6,8 @@
 * pandas
 * matplotlib
 
-### running -> python3 main.py
+### Run
+#### $ python3 main.py
 
 ## Version
 * v 1.0 ( ~ 21. 5. 26. )
