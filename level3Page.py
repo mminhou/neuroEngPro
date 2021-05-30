@@ -19,19 +19,23 @@ class Level3Page(tk.Frame):
 
         # Level3 Map
         self.gameMap = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 3],
+            [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1],
+            [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+            [0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+            [0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1],
+            [0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+            [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+            [0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
+            [0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
+            [0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+            [2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
         ]
+        self.srcX = 0
+        self.srcY = 0
+        self.posX = 0
+        self.posY = 0
 
         for r in range(12):
             for c in range(12):
@@ -41,6 +45,20 @@ class Level3Page(tk.Frame):
                     self.canvas.create_image(c * 57 + 410, r * 57 + 140, image=self.nogoImage)
                 elif self.gameMap[r][c] == 3:
                     self.canvas.create_image(c * 57 + 410, r * 57 + 140, image=self.exitImage)
+                elif self.gameMap[r][c] == 2:
+                    self.srcX = c * 57 + 410
+                    self.srcY = r * 57 + 140
+                    self.posX = c
+                    self.posY = r
+
+        self.player = Player(self.canvas, self.srcX, self.srcY)
+        self.canvas.bind('<Left>', lambda _: self.leftSide())
+        self.canvas.bind('<Right>',
+                         lambda _: self.rightSide())
+        self.canvas.bind('<Up>',
+                         lambda _: self.upSide())
+        self.canvas.bind('<Down>',
+                         lambda _: self.downSide())
 
         # Previous Button
         self.backBtn = tk.PhotoImage(file='factory/image/exitButton2.png')
@@ -49,3 +67,54 @@ class Level3Page(tk.Frame):
                                 borderwidth=0, highlightthickness=0,
                                 command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1375, 60, window=backButton)
+
+    def isCollide(self):
+        if self.posX < 0:   return True
+        if self.posX >= 12:  return True
+        if self.posY < 0:   return True
+        if self.posY >= 12:  return True
+        if self.gameMap[self.posY][self.posX] == 0: return True
+        return False
+
+    def leftSide(self):
+        self.posX -= 1
+        if self.isCollide():
+            self.posX += 1
+        else:
+            self.player.move(-57, 0)
+
+    def rightSide(self):
+        self.posX += 1
+        if self.isCollide():
+            self.posX -= 1
+        else:
+            self.player.move(57, 0)
+
+    def upSide(self):
+        self.posY -= 1
+        if self.isCollide():
+            self.posY += 1
+        else:
+            self.player.move(0, -57)
+
+    def downSide(self):
+        self.posY += 1
+        if self.isCollide():
+            self.posY -= 1
+        else:
+            self.player.move(0, 57)
+
+
+class MoveObject:
+    def __init__(self, canvas, item):
+        self.canvas = canvas
+        self.item = item
+
+    def move(self, x, y):
+        self.canvas.move(self.item, x, y)
+
+class Player(MoveObject):
+    def __init__(self, canvas, x, y):
+        self.pImage = tk.PhotoImage(file='factory/image/player3.png')
+        self.player = canvas.create_image(x, y, image=self.pImage)
+        super(Player, self).__init__(canvas, self.player)
