@@ -9,8 +9,16 @@ from level3Page import *
 class App(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title("WTF")
+        self.title("Neuro")
+        # self.w = 1600
+        # self.h = 1200
+        # self.sw = self.winfo_screenwidth()
+        # self.sh = self.winfo_screenheight()
+        # self.x = (self.sw-self.w)/2
+        # self.y = (self.sh-self.h)/2
+
         self.geometry("1600x1200")
+        # self.geometry('%dx%d+%d+%d' % (self.w, self.h, self.x, self.y))
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
         # main container
@@ -36,6 +44,8 @@ class App(tk.Tk):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
+        frame.canvas.focus_set()
+        # print(frame.canvas.focus_get())
 
 
 
