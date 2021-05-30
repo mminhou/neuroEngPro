@@ -6,7 +6,6 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.wall = tk.PhotoImage(file='factory/image/startWall.png')
-
         self.level2Btn = tk.PhotoImage(file='factory/image/level2.png')
         self.level3Btn = tk.PhotoImage(file='factory/image/level3.png')
         self.level1Btn = tk.PhotoImage(file='factory/image/level1.png')
@@ -16,17 +15,17 @@ class StartPage(tk.Frame):
         # Start Canvas
         self.canvas = tk.Canvas(self, width=1600, height=1200)
         self.canvas.pack(fill="both", expand=True)
-
-        # Start Wall
         self.image = self.canvas.create_image(740, 500, image=self.wall)
 
         # Fp2 filePath Button
-        fp2Button = tk.Button(self, image=self.backBtn, borderwidth=0, highlightthickness=0,
+        fp2Button = tk.Button(self, text="FP2", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
                               command=lambda: self.path())
-        self.canvas.create_window(310, 190, window=fp2Button)
-
+        self.canvas.create_window(450, 100, window=fp2Button, anchor="nw")
 
         # Biomarkers filePath Button
+        biomarkersButton = tk.Button(self, text="BIO", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
+                              command=lambda: self.path())
+        self.canvas.create_window(850, 100, window=biomarkersButton, anchor="nw")
 
 
         # Level2 Button
