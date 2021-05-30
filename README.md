@@ -1,12 +1,12 @@
 # NeuroEngPro
 
-### Requirement package
+## Requirement package
 * tk (tkinter)
 * pillow
 * pandas
 * matplotlib
 
-### Run
+## Run
 #### $ python3 main.py
 
 ## Version
