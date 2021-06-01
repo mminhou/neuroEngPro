@@ -24,10 +24,13 @@ class Level1Page(tk.Frame):
             [1, 1, 0, 0],
             [2, 1, 0, 0],
         ]
-        self.srcX = 0
-        self.srcY = 0
-        self.posX = 0
-        self.posY = 0
+
+        # src position -> real screen position
+        self.srcX = self.srcY = 0
+        # Destination (x, y) based on gameMap
+        self.dstX = self.dstY = 0
+        # Position (x, y) based on gameMap
+        self.posX = self.posY = 0
 
         for r in range(4):
             for c in range(4):
@@ -40,6 +43,8 @@ class Level1Page(tk.Frame):
                 # Destination
                 elif self.gameMap[r][c] == 3:
                     self.canvas.create_image(c * 170 + 470, r * 170 + 200, image=self.exitImage)
+                    self.dstX = c
+                    self.dstY = r
                 # Player
                 elif self.gameMap[r][c] == 2:
                     self.srcX = c * 170 + 470
@@ -83,6 +88,10 @@ class Level1Page(tk.Frame):
             self.posX += 1
         else:
             self.player.move(-170, 0)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
+                # time.sleep(0.2)
+                self.controller.show_frame("CompletePage")
 
     def rightSide(self):
         self.posX += 1
@@ -90,6 +99,10 @@ class Level1Page(tk.Frame):
             self.posX -= 1
         else:
             self.player.move(170, 0)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
+                # time.sleep(0.2)
+                self.controller.show_frame("CompletePage")
 
     def upSide(self):
         self.posY -= 1
@@ -97,6 +110,10 @@ class Level1Page(tk.Frame):
             self.posY += 1
         else:
             self.player.move(0, -170)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
+                # time.sleep(0.2)
+                self.controller.show_frame("CompletePage")
 
     def downSide(self):
         self.posY += 1
@@ -104,6 +121,15 @@ class Level1Page(tk.Frame):
             self.posY -= 1
         else:
             self.player.move(0, 170)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
+                # time.sleep(0.2)
+                self.controller.show_frame("CompletePage")
+
+    def isDst(self, x, y):
+        if x == self.dstX and y == self.dstY:
+            return True
+
 
 class MoveObject:
     def __init__(self, canvas, item):

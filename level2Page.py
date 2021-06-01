@@ -29,10 +29,10 @@ class Level2Page(tk.Frame):
             [1, 1, 1, 1, 1, 1, 0, 0],
             [2, 1, 0, 0, 1, 1, 0, 0],
         ]
-        self.srcX = 0
-        self.srcY = 0
-        self.posX = 0
-        self.posY = 0
+
+        self.srcX = self.srcY = 0
+        self.dstX = self.dstY = 0
+        self.posX = self.posY = 0
 
         for r in range(8):
             for c in range(8):
@@ -83,6 +83,8 @@ class Level2Page(tk.Frame):
             self.posX += 1
         else:
             self.player.move(-85, 0)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
 
     def rightSide(self):
         self.posX += 1
@@ -90,6 +92,8 @@ class Level2Page(tk.Frame):
             self.posX -= 1
         else:
             self.player.move(85, 0)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
 
     def upSide(self):
         self.posY -= 1
@@ -97,6 +101,8 @@ class Level2Page(tk.Frame):
             self.posY += 1
         else:
             self.player.move(0, -85)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
 
     def downSide(self):
         self.posY += 1
@@ -104,7 +110,12 @@ class Level2Page(tk.Frame):
             self.posY -= 1
         else:
             self.player.move(0, 85)
+            if self.isDst(self.posX, self.posY):
+                print("Destination!")
 
+    def isDst(self, x, y):
+        if x == self.dstX and y == self.dstY:
+            return True
 
 class MoveObject:
     def __init__(self, canvas, item):
