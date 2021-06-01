@@ -5,6 +5,7 @@ from startPage import *
 from level1Page import *
 from level2Page import *
 from level3Page import *
+from completePage import *
 
 class App(tk.Tk):
     def __init__(self):
@@ -28,7 +29,8 @@ class App(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (IntroPage, GraphPage, StartPage, Level1Page, Level2Page, Level3Page):
+
+        for F in (IntroPage, GraphPage, StartPage, Level1Page, Level2Page, Level3Page, CompletePage):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -36,7 +38,7 @@ class App(tk.Tk):
             # put all of the pages in the same location;
             # the one on the top of the stacking order
             # will be the one that is visible.
-            frame.grid(row=0, column=0, sticky="nsew")
+            frame.grid(row=0, column=0, sticky="news")
 
         self.show_frame("IntroPage")
 
@@ -45,7 +47,6 @@ class App(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
         frame.canvas.focus_set()
-        # print(frame.canvas.focus_get())
 
 
 
