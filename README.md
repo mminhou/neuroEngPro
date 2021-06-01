@@ -19,6 +19,7 @@
     
 * v 1.1 ( ~ 21. 5. 30.)
     * fixing functions
+    * add fp2, biomarkers button
     * expended frame pages
     * expand level2,3 functions based on level1's functions
     * solved frame focus_set() issues
