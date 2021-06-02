@@ -1,4 +1,5 @@
 from module import *
+from completePage import *
 
 class Level1Page(tk.Frame):
     def __init__(self, parent, controller):
@@ -9,7 +10,6 @@ class Level1Page(tk.Frame):
         self.goImage = tk.PhotoImage(file='factory/image/go1.png')
         self.nogoImage = tk.PhotoImage(file='factory/image/nogo1.png')
         self.exitImage = tk.PhotoImage(file='factory/image/exit1.png')
-
         # Level1 Canvas
         self.canvas = tk.Canvas(self, width=1600, height=1200)
         self.canvas.pack()
@@ -69,6 +69,10 @@ class Level1Page(tk.Frame):
                                   command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1375, 60, window=backButton)
 
+        # 제한 시간 관련
+        self.remaining = 0
+        self.countdown(10)
+
     def isCollide(self):
         if self.posX < 0:
             return True
@@ -91,7 +95,7 @@ class Level1Page(tk.Frame):
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
                 # time.sleep(0.2)
-                self.controller.show_frame("CompletePage")
+                self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def rightSide(self):
         self.posX += 1
@@ -102,7 +106,7 @@ class Level1Page(tk.Frame):
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
                 # time.sleep(0.2)
-                self.controller.show_frame("CompletePage")
+                self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def upSide(self):
         self.posY -= 1
@@ -113,7 +117,8 @@ class Level1Page(tk.Frame):
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
                 # time.sleep(0.2)
-                self.controller.show_frame("CompletePage")
+
+                self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def downSide(self):
         self.posY += 1
@@ -124,11 +129,31 @@ class Level1Page(tk.Frame):
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
                 # time.sleep(0.2)
-                self.controller.show_frame("CompletePage")
+                self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def isDst(self, x, y):
         if x == self.dstX and y == self.dstY:
+            # print(180-self.remaining)
+            # CompletePage.time = 180-self.remaining
+            # self.controller.show_frame["CompletePage"].time = 180-self.remaining
             return True
+
+    # 제한시간 정의
+    def countdown(self, remaining=None):
+        self.canvas.delete('ctime')
+        if remaining is not None:
+            self.remaining = remaining
+
+        if int(self.remaining) <= 0:
+            self.controller.show_frame('FailPage')
+            # self.canvas.create_text(text="time's up!")
+        else:
+            self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
+                                    font=("Helvetica", 70, 'bold'), tags=('ctime'))
+            self.remaining = self.remaining - 1
+            # self.canvas.delete('ctime')
+            # 플레이 시간 초 추가
+            self.after(1000, self.countdown)
 
 
 class MoveObject:
