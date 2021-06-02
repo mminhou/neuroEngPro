@@ -24,3 +24,6 @@
     * expand level2,3 functions based on level1's functions
     * solved frame focus_set() issues
 
+* v 1.2 ( ~ 21. 6. 1.)
+    * update failPage, completePage
+    * p300 processing
