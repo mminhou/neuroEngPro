@@ -48,11 +48,13 @@ def ssvepProcess():
     #     print(dataSample)
 
 def p300Processing():
+    # RAWDATA_FILENAME = filePath
     RAWDATA_FILENAME = "factory/data/Rawdata.txt"
     forCompareData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949').loc[:, ['Time', 'EEG_Fp2']].tail()
 
-    # time.sleep(2.4)
+    # time.sleep(10)
     while(1):
+        # time.sleep(6)
         rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
         extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
         # 종료를 위한 예외처리
