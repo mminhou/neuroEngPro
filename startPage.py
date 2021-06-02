@@ -1,5 +1,6 @@
 from module import *
 from tkinter import filedialog
+from processing import *
 
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -28,7 +29,7 @@ class StartPage(tk.Frame):
 
         # Level2 Button
         level1Button = tk.Button(self, image=self.level1Btn, borderwidth=0, highlightthickness=0,
-                                command=lambda: [controller.show_frame("Level1Page"), self.rawdataPath()])
+                                command=lambda: [self.rawdataPath(), controller.show_frame("Level1Page")])
         self.canvas.create_window(310, 490, window=level1Button)
 
         # Level3 Button
@@ -53,3 +54,4 @@ class StartPage(tk.Frame):
                                               filetypes=(("text files", "*.txt"),
                                                          ("all files", "*.*")))
         print(self.rawdataFilename)
+        p300Processing(self.rawdataFilename)

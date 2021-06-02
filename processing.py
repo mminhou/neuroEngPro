@@ -47,14 +47,13 @@ def ssvepProcess():
     #     time.sleep(3)
     #     print(dataSample)
 
-def p300Processing():
-    # RAWDATA_FILENAME = filePath
-    RAWDATA_FILENAME = "factory/data/Rawdata.txt"
+def p300Processing(filePath):
+    RAWDATA_FILENAME = filePath
+    # RAWDATA_FILENAME = "factory/data/Rawdata.txt"
     forCompareData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949').loc[:, ['Time', 'EEG_Fp2']].tail()
 
-    # time.sleep(10)
     while(1):
-        # time.sleep(6)
+        '''
         rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
         extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
         # 종료를 위한 예외처리
@@ -62,11 +61,65 @@ def p300Processing():
             print('True')
             break
         forCompareData = extractData.tail()
+        '''
+        rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
+        extractData = rawData.loc[-200:, ['Time', 'EEG_Fp2']]
+        # 시간표현 분의 표현 issue -> 분 뽑아내서 * 60 한 후 초에 더해준다.
+        src = float(extractData['Time'][0][5:7]) * 60 + float(extractData['Time'][0][8:14])  # Init time
+        # forCompareData = extractData.tail()
+        # print(extractData['Time'].str[5:7]) // min
+        # print(extractData['Time'].str[8:14]) // seconds
+        extractData['Time'] = extractData['Time'].str[5:7].astype('float') * 60 + \
+                              extractData['Time'].str[8:14].astype('float')
+
+        x = extractData['Time']
+        y = extractData['EEG_Fp2']
+        plt.plot(x, y)
+
+        leftCondition = extractData['Time'] < src + 1.5
+        leftSide = extractData[leftCondition]
+        plt.plot(x[leftCondition], y[leftCondition], color='red')
+        left = leftSide['EEG_Fp2'].mean()
+        print(leftSide['EEG_Fp2'].mean())
+
+        rightCondition = extractData['Time'].between(src + 1.5, src + 3)
+        rightSide = extractData[rightCondition]
+        plt.plot(x[rightCondition], y[rightCondition], color='blue')
+        right = rightSide['EEG_Fp2'].mean()
+        print(rightSide['EEG_Fp2'].mean())
+
+        upCondition = extractData['Time'].between(src + 3, src + 4.5)
+        upSide = extractData[upCondition]
+        plt.plot(x[upCondition], y[upCondition], color='yellow')
+        up = upSide['EEG_Fp2'].mean()
+        print(upSide['EEG_Fp2'].mean())
+
+        downCondition = extractData['Time'].between(src + 4.5, src + 6)
+        downSide = extractData[downCondition]
+        plt.plot(x[downCondition], y[downCondition], color='green')
+        down = downSide['EEG_Fp2'].mean()
+        print(downSide['EEG_Fp2'].mean())
+
+        plt.show()
+
+        if max([left, right, up, down]) == left:
+            print("left")
+        elif max([left, right, up, down]) == right:
+            print("right")
+        elif max([left, right, up, down]) == up:
+            print("up")
+        elif max([left, right, up, down]) == down:
+            print("down")
+
+        time.sleep(6)
 
 
-    rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
-    extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
 
+    '''rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
+    extractData = rawData.loc[-20:, ['Time', 'EEG_Fp2']]
+    print(extractData)'''
+    # extractData = rawData.tail().loc[:, ['Time', 'EEG_Fp2']]
+'''
     # 시간표현 분의 표현 issue -> 분 뽑아내서 * 60 한 후 초에 더해준다.
     src = float(extractData['Time'][0][5:7]) * 60 + float(extractData['Time'][0][8:14]) # Init time
     forCompareData = extractData.tail()
@@ -83,27 +136,39 @@ def p300Processing():
     leftCondition = extractData['Time'] < src + 1.5
     leftSide = extractData[leftCondition]
     plt.plot(x[leftCondition], y[leftCondition], color='red')
-    # print(leftSide)
+    left = leftSide['EEG_Fp2'].mean()
+    print(leftSide['EEG_Fp2'].mean())
 
     rightCondition = extractData['Time'].between(src + 1.5, src + 3)
     rightSide = extractData[rightCondition]
     plt.plot(x[rightCondition], y[rightCondition], color='blue')
-    # print(rightSide)
+    right = rightSide['EEG_Fp2'].mean()
+    print(rightSide['EEG_Fp2'].mean())
 
     upCondition = extractData['Time'].between(src + 3, src + 4.5)
     upSide = extractData[upCondition]
     plt.plot(x[upCondition], y[upCondition], color='yellow')
-    # print(upSide)
+    up = upSide['EEG_Fp2'].mean()
+    print(upSide['EEG_Fp2'].mean())
 
     downCondition = extractData['Time'].between(src + 4.5, src + 6)
     downSide = extractData[downCondition]
     plt.plot(x[downCondition], y[downCondition], color='green')
-    # print(downSide)
+    down = downSide['EEG_Fp2'].mean()
+    print(downSide['EEG_Fp2'].mean())
 
     plt.show()
 
+    if max([left, right, up, down]) == left:
+        print("left")
+    elif max([left, right, up, down]) == right:
+        print("right")
+    elif max([left, right, up, down]) == up:
+        print("up")
+    elif max([left, right, up, down]) == down:
+        print("down")
 
-
+'''
 
 # biomarkers()
 # ssvepProcess()
