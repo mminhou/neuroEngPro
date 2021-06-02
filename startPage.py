@@ -26,10 +26,9 @@ class StartPage(tk.Frame):
         #                       command=lambda: self.path())
         # self.canvas.create_window(850, 100, window=biomarkersButton, anchor="nw")
 
-
         # Level2 Button
         level1Button = tk.Button(self, image=self.level1Btn, borderwidth=0, highlightthickness=0,
-                                command=lambda: controller.show_frame("Level1Page"))
+                                command=lambda: [controller.show_frame("Level1Page"), self.rawdataPath()])
         self.canvas.create_window(310, 490, window=level1Button)
 
         # Level3 Button
