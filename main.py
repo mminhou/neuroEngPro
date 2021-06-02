@@ -6,6 +6,7 @@ from level1Page import *
 from level2Page import *
 from level3Page import *
 from completePage import *
+from failPage import *
 
 class App(tk.Tk):
     def __init__(self):
@@ -30,11 +31,11 @@ class App(tk.Tk):
 
         self.frames = {}
 
-        for F in (IntroPage, GraphPage, StartPage, Level1Page, Level2Page, Level3Page, CompletePage):
+        for F in (IntroPage, GraphPage, StartPage, Level1Page, Level2Page, Level3Page,
+                  CompletePage, FailPage):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
-
             # put all of the pages in the same location;
             # the one on the top of the stacking order
             # will be the one that is visible.
@@ -42,11 +43,14 @@ class App(tk.Tk):
 
         self.show_frame("IntroPage")
 
-    def show_frame(self, page_name):
+    def show_frame(self, page_name, arg=None):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
+        self.shared_data = arg
         frame.tkraise()
         frame.canvas.focus_set()
+        # print(self.shared_data)
+
 
 
 
