@@ -71,7 +71,7 @@ class Level1Page(tk.Frame):
 
         # 제한 시간 관련
         self.remaining = 0
-        self.countdown(10)
+        self.countdown(180)
 
     def isCollide(self):
         if self.posX < 0:
