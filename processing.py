@@ -1,4 +1,5 @@
 import pandas as pd
+from matplotlib import pyplot as plt
 import time
 
 def biomarkers():
@@ -20,6 +21,7 @@ def biomarkers():
 def ssvepProcess():
     # FP2_FILENAME = filename
     FP2_FILENAME = "factory/data/Fp2_FFT.txt"
+    print(FP2_FILENAME)
 
     fp2Data = pd.read_csv(FP2_FILENAME, sep="\t", encoding='cp949')
 
@@ -45,5 +47,62 @@ def ssvepProcess():
     #     time.sleep(3)
     #     print(dataSample)
 
+def p300Processing():
+    RAWDATA_FILENAME = "factory/data/Rawdata.txt"
+    forCompareData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949').loc[:, ['Time', 'EEG_Fp2']].tail()
+
+    # time.sleep(2.4)
+    while(1):
+        rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
+        extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
+        # 종료를 위한 예외처리
+        if extractData.tail().equals(forCompareData):
+            print('True')
+            break
+        forCompareData = extractData.tail()
+
+
+    rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
+    extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
+
+    # 시간표현 분의 표현 issue -> 분 뽑아내서 * 60 한 후 초에 더해준다.
+    src = float(extractData['Time'][0][5:7]) * 60 + float(extractData['Time'][0][8:14]) # Init time
+    forCompareData = extractData.tail()
+    # print(extractData['Time'].str[5:7]) // min
+    # print(extractData['Time'].str[8:14]) // seconds
+    extractData['Time'] = extractData['Time'].str[5:7].astype('float') * 60 +\
+                          extractData['Time'].str[8:14].astype('float')
+
+    x = extractData['Time']
+    y = extractData['EEG_Fp2']
+    plt.plot(x, y)
+
+
+    leftCondition = extractData['Time'] < src + 1.5
+    leftSide = extractData[leftCondition]
+    plt.plot(x[leftCondition], y[leftCondition], color='red')
+    # print(leftSide)
+
+    rightCondition = extractData['Time'].between(src + 1.5, src + 3)
+    rightSide = extractData[rightCondition]
+    plt.plot(x[rightCondition], y[rightCondition], color='blue')
+    # print(rightSide)
+
+    upCondition = extractData['Time'].between(src + 3, src + 4.5)
+    upSide = extractData[upCondition]
+    plt.plot(x[upCondition], y[upCondition], color='yellow')
+    # print(upSide)
+
+    downCondition = extractData['Time'].between(src + 4.5, src + 6)
+    downSide = extractData[downCondition]
+    plt.plot(x[downCondition], y[downCondition], color='green')
+    # print(downSide)
+
+    plt.show()
+
+
+
+
 # biomarkers()
-ssvepProcess()
+# ssvepProcess()
+p300Processing()
