@@ -1,6 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import time
+
 def biomarkers():
     BIOMARKERS_FILENAME = "factory/data/Biomarkers.txt"
     bioData = pd.read_csv(BIOMARKERS_FILENAME, sep="\t", encoding='cp949')
@@ -13,6 +14,7 @@ def biomarkers():
     # condition fp2 Beta Data
     conditionfp2BetaData = fp2BetaData[condition]
     print(conditionfp2BetaData.mean())      # Average of Condition Fp2 Beta Data
+
 def ssvepProcess():
     # FP2_FILENAME = filename
     FP2_FILENAME = "factory/data/Fp2_FFT.txt"
@@ -36,6 +38,7 @@ def ssvepProcess():
     #     dataSample = extractData.tail()
     #     time.sleep(3)
     #     print(dataSample)
+'''
 def p300Processing(filePath):
     RAWDATA_FILENAME = filePath
     # RAWDATA_FILENAME = "factory/data/Rawdata.txt"
@@ -43,7 +46,7 @@ def p300Processing(filePath):
     time.sleep(10)
     while(1):
         time.sleep(10)
-        '''
+        #
         rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
         extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
         # 종료를 위한 예외처리
@@ -51,7 +54,7 @@ def p300Processing(filePath):
             print('True')
             break
         forCompareData = extractData.tail()
-        '''
+        #
         rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
         extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
         extractData['Time'] = extractData['Time'].str[5:7].astype('float') * 60 + \
@@ -104,11 +107,11 @@ def p300Processing(filePath):
             print("up")
         elif max([left, right, up, down]) == down:
             print("down")
-    '''
+    #
     rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
     extractData = rawData.loc[-20:, ['Time', 'EEG_Fp2']]
     # extractData = rawData.tail().loc[:, ['Time', 'EEG_Fp2']]
-    # 시간표현 분의 표현 issue -> 분 뽑아내서 * 60 한 후 초에 더해준다.
+    # 시ls간표현 분의 표현 issue -> 분 뽑아내서 * 60 한 후 초에 더해준다.
     src = float(extractData['Time'][0][5:7]) * 60 + float(extractData['Time'][0][8:14]) # Init time
     forCompareData = extractData.tail()
     # print(extractData['Time'].str[5:7]) // min
@@ -152,7 +155,115 @@ def p300Processing(filePath):
         print("up")
     elif max([left, right, up, down]) == down:
         print("down")
-    '''
+    #
+'''
+
+def p300Processing2(filePath):
+    RAWDATA_FILENAME = filePath
+    forCompareData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949').loc[:, ['Time', 'EEG_Fp2']].tail()
+    # time.sleep(10)
+
+    rawData = pd.read_csv(RAWDATA_FILENAME, sep="\t", encoding='cp949')
+    extractData = rawData.loc[:, ['Time', 'EEG_Fp2']]
+    extractData['Time'] = extractData['Time'].str[5:7].astype('float') * 60 + extractData['Time'].str[8:14].astype('float')
+    last = float(extractData['Time'].iloc[-1])
+    print(last)
+    dataCondition = extractData['Time'].astype('float') > last - 10
+    extractData = extractData[dataCondition]
+
+    leftCondition = extractData['Time'] < last - 2.5
+    leftSide = extractData[leftCondition]
+    left = leftSide['EEG_Fp2'].mean()
+    print(leftSide['EEG_Fp2'].mean())
+
+    rightCondition = extractData['Time'].between(last - 5, last - 2.5)
+    rightSide = extractData[rightCondition]
+    right = rightSide['EEG_Fp2'].mean()
+    print(rightSide['EEG_Fp2'].mean())
+
+    upCondition = extractData['Time'].between(last - 7.5, last - 5)
+    upSide = extractData[upCondition]
+    up = upSide['EEG_Fp2'].mean()
+    print(upSide['EEG_Fp2'].mean())
+
+    downCondition = extractData['Time'].between(last - 10, last - 7.5)
+    downSide = extractData[downCondition]
+    down = downSide['EEG_Fp2'].mean()
+    print(downSide['EEG_Fp2'].mean())
+
+    if max([left, right, up, down]) == left:
+        print("left")
+        return 'left'
+    elif max([left, right, up, down]) == right:
+        print("right")
+        return 'right'
+    elif max([left, right, up, down]) == up:
+        print("up")
+        return 'up'
+    elif max([left, right, up, down]) == down:
+        print("down")
+        return 'down'
+
+def fp2GraphImage(filePath):
+    # playTime이 필요한가? -> 이 함수를 불러오는시점에서 complete데이터가 들어오는건데?
+    # BIOMARKERS_FILENAME = 'factory/data/Biomarkers.txt'
+    BIOMARKERS_FILENAME = filePath
+
+    bioData = pd.read_csv(BIOMARKERS_FILENAME, sep="\t", encoding='cp949')
+    exeTime = bioData['Time'][0]
+
+    extractFp1Beta = bioData['Fp1_Beta(%)']
+    extractFp2Beta = bioData['Fp2_Beta(%)']
+    conditionFp1 = extractFp1Beta > 15
+    conditionFp2 = extractFp2Beta > 15
+
+    avgTotalFp1 = extractFp1Beta.mean()
+    avgTotalFp2 = extractFp2Beta.mean()
+    avgConditionFp1 = extractFp1Beta[conditionFp1].mean()
+    avgConditionFp2 = extractFp2Beta[conditionFp2].mean()
+
+    avgTotal = (avgTotalFp1 + avgTotalFp2) / 2
+    avgCondition = (avgConditionFp1 + avgConditionFp2) / 2
+    print(avgTotal, avgCondition)
+
+    # 누적데이터의 저장
+    resultData = pd.read_csv('factory/data/result.txt', sep='\t')
+    resultData = resultData.append({'Time': exeTime, 'Total': avgTotal, 'Concentration': avgCondition}, ignore_index=True)
+    resultData.to_csv('factory/data/result.txt', sep='\t', index=False)
+    tailResult = resultData.tail()
+    print(tailResult)
+    print(len(tailResult))
+
+    def create_x(t, w, n, d):
+        return [t * x + w * n for x in range(d)]
+
+    if len(tailResult) == 1:
+        d = 1
+    elif len(tailResult) == 2:
+        d = 2
+    elif len(tailResult) == 3:
+        d = 3
+    elif len(tailResult) == 4:
+        d = 4
+    elif len(tailResult) >= 5:
+        d = 5
+
+    X_TOTAL = create_x(2, 0.8, 1, d)
+    X_CONCEN = create_x(2, 0.8, 2, d)
+
+    ax = plt.subplot()
+    ax.bar(X_TOTAL, tailResult['Total'])
+    ax.bar(X_CONCEN, tailResult['Concentration'])
+
+    middle_x = [(a + b) / 2 for (a, b) in zip(X_TOTAL, X_CONCEN)]
+    ax.set_xticks(middle_x)
+    ax.set_xticklabels(tailResult['Time'][4:])
+    plt.savefig('factory/image/result.png')
+
+    # plt.show()
+
+
+# fp2GraphImage()
 # biomarkers()
 # ssvepProcess()
 # p300Processing()
