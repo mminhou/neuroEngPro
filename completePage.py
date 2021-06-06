@@ -14,26 +14,24 @@ class CompletePage(tk.Frame):
         # Title
         self.canvas.create_text(700, 200, text="Clear!", font=("Helvetica", 80, 'bold'), fill="Red")
 
-        # 플레이 시간 계산
-        if self.time / 60 >= 1:
-            self.play_time = "플레이 시간 : " + str(math.trunc(self.time / 60)) + "분" + str(self.time % 60) + "초"
-        else:
-            self.play_time = "플레이 시간 : " + str(self.time) + "초"
+        # Clear Text
+        self.canvas.create_text(700, 300, text="Play Time", font=("Helvetica", 70, 'bold'), fill='Green')
+        self.canvas.bind('<a>', lambda _: self.read_txt())
 
-        # 플레이 시간 출력
-        self.canvas.create_text(700, 400, text=self.play_time, font=('Helvetica', 70, "bold"))
-
-        # Graph Image
-        # self.image = self.canvas.create_image(740, 500, image=self.graphWall)
-
-        # Graph Image
-        # self.image = self.canvas.create_image(740, 500, image=self.graphWall)
-
-        # Previous Button
-        self.backBtn = tk.PhotoImage(file='factory/image/exitButton.png')
-        # self.graphBtn = self.graphBtn.subsample(4, 4) # Resizing button
-        backButton = tk.Button(self, image=self.backBtn,
+        # Go Home Button
+        homeButton = tk.Button(self, text="go home",
+                               font=("Helvetica", 80, 'bold'),
                                borderwidth=0, highlightthickness=0,
                                command=lambda: controller.show_frame("IntroPage"))
-        self.canvas.create_window(1375, 60, window=backButton)
+        self.canvas.create_window(700, 500, window=homeButton)
 
+    def read_txt(self):
+        self.f = open('factory/image/play_time.txt', 'r+t')
+        self.a = self.f.readline()
+        self.b = (int)(self.a)
+        self.print_time = 180 - self.b
+        print(self.a)
+        print(self.b)
+        print(self.print_time)
+        self.k = "플레이 시간 : " + str(self.print_time)
+        self.canvas.create_text(730, 400, text=self.k, font=('Helvetica', 30, "bold"))
