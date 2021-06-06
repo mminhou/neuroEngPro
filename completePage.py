@@ -30,8 +30,5 @@ class CompletePage(tk.Frame):
         self.a = self.f.readline()
         self.b = (int)(self.a)
         self.print_time = 180 - self.b
-        print(self.a)
-        print(self.b)
-        print(self.print_time)
         self.k = "플레이 시간 : " + str(self.print_time)
         self.canvas.create_text(730, 400, text=self.k, font=('Helvetica', 30, "bold"))
