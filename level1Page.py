@@ -1,5 +1,11 @@
 from module import *
+from datetime import datetime
 from completePage import *
+from tkinter import filedialog
+from processing import *
+
+class Global():
+    count_time = 0
 
 class Level1Page(tk.Frame):
     def __init__(self, parent, controller):
@@ -10,6 +16,14 @@ class Level1Page(tk.Frame):
         self.goImage = tk.PhotoImage(file='factory/image/go1.png')
         self.nogoImage = tk.PhotoImage(file='factory/image/nogo1.png')
         self.exitImage = tk.PhotoImage(file='factory/image/exit1.png')
+
+        def min(self):
+            now1 = datetime.now()
+            return now1.minute
+        def sec(self):
+            now1_ = datetime.now()
+            return now1_.second
+
         # Level1 Canvas
         self.canvas = tk.Canvas(self, width=1600, height=1200)
         self.canvas.pack()
@@ -69,9 +83,15 @@ class Level1Page(tk.Frame):
                                   command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1375, 60, window=backButton)
 
-        # 제한 시간 관련
-        self.remaining = 0
-        self.countdown(180)
+        # Path Button
+        setPathButton = tk.Button(self, text="PATH", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
+                              command=lambda: self.rawdataPath())
+        self.canvas.create_window(60, 100, window=setPathButton, anchor="nw")
+        # Path Button
+        startButton = tk.Button(self, text="START", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
+                                  command=lambda: self.countdown(5))
+        self.canvas.create_window(60, 210, window=startButton, anchor="nw")
+
 
     def isCollide(self):
         if self.posX < 0:
@@ -94,7 +114,6 @@ class Level1Page(tk.Frame):
             self.player.move(-170, 0)
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
-                # time.sleep(0.2)
                 self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def rightSide(self):
@@ -105,7 +124,6 @@ class Level1Page(tk.Frame):
             self.player.move(170, 0)
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
-                # time.sleep(0.2)
                 self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def upSide(self):
@@ -116,8 +134,6 @@ class Level1Page(tk.Frame):
             self.player.move(0, -170)
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
-                # time.sleep(0.2)
-
                 self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def downSide(self):
@@ -128,7 +144,6 @@ class Level1Page(tk.Frame):
             self.player.move(0, 170)
             if self.isDst(self.posX, self.posY):
                 print("Destination!")
-                # time.sleep(0.2)
                 self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def isDst(self, x, y):
@@ -145,15 +160,25 @@ class Level1Page(tk.Frame):
             self.remaining = remaining
 
         if int(self.remaining) <= 0:
-            self.controller.show_frame('FailPage')
-            # self.canvas.create_text(text="time's up!")
+            self.controller.show_frame("FailPage")
         else:
             self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
-                                    font=("Helvetica", 70, 'bold'), tags=('ctime'))
+                                        font=("Helvetica", 70, 'bold'), tags=('ctime'))
             self.remaining = self.remaining - 1
-            # self.canvas.delete('ctime')
-            # 플레이 시간 초 추가
+            f = open('factory/image/play_time.txt', 'w+t')
+            Global.count_time += 1
+            playTxt = str(self.remaining)
+            f.write(playTxt)
+            f.close()
             self.after(1000, self.countdown)
+
+    def rawdataPath(self):
+        self.rawdataFilename = filedialog.askopenfilename(initialdir="/", title="Select file",
+                                              filetypes=(("text files", "*.txt"),
+                                                         ("all files", "*.*")))
+        print(self.rawdataFilename)
+        print(self.rawdataFilename[:-11]+'Fp2_FFT.txt')
+        # p300Processing(self.rawdataFilename)
 
 
 class MoveObject:
