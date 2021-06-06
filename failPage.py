@@ -11,7 +11,7 @@ class FailPage(tk.Frame):
         self.canvas.pack(fill="both", expand=True)
 
         # Title
-        self.canvas.create_text(700, 200, text="Time's Up", font=("Helvetica", 80, 'bold'), fill="Black")
+        self.canvas.create_text(700, 200, text="Time's Up", font=("Helvetica", 80, 'bold'), fill="red")
 
         # Graph Image
         # self.image = self.canvas.create_image(740, 500, image=self.graphWall)
