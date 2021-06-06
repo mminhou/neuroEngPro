@@ -30,4 +30,8 @@
   
 * v 1.3 ( ~ 21. 6. 2. )
     * process code demo version
-    
+  
+* v 1.4 ( ~ 21. 6. 6. )
+    * path button in startPge -> levelpage
+    * fixed timer
+    * path, start Btn added each levelpage
