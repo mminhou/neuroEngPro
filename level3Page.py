@@ -1,4 +1,8 @@
 from module import *
+from processing import *
+
+class Global():
+    count_time = 0
 
 class Level3Page(tk.Frame):
     def __init__(self, parent, controller):
@@ -45,6 +49,8 @@ class Level3Page(tk.Frame):
                     self.canvas.create_image(c * 57 + 410, r * 57 + 140, image=self.nogoImage)
                 elif self.gameMap[r][c] == 3:
                     self.canvas.create_image(c * 57 + 410, r * 57 + 140, image=self.exitImage)
+                    self.dstX = c
+                    self.dstY = r
                 elif self.gameMap[r][c] == 2:
                     self.srcX = c * 57 + 410
                     self.srcY = r * 57 + 140
@@ -68,6 +74,12 @@ class Level3Page(tk.Frame):
                                 command=lambda: controller.show_frame("StartPage"))
         self.canvas.create_window(1375, 60, window=backButton)
 
+        # Path Button
+        setPathButton = tk.Button(self, text="PATH", font=("Helvetica", 80, 'bold'), borderwidth=0,
+                                  highlightthickness=0,
+                                  command=lambda: self.rawdataPath())
+        self.canvas.create_window(60, 100, window=setPathButton, anchor="nw")
+        
     def isCollide(self):
         if self.posX < 0:   return True
         if self.posX >= 12:  return True
@@ -82,8 +94,7 @@ class Level3Page(tk.Frame):
             self.posX += 1
         else:
             self.player.move(-57, 0)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
+            self.isDst(self.posX, self.posY)
 
     def rightSide(self):
         self.posX += 1
@@ -91,8 +102,7 @@ class Level3Page(tk.Frame):
             self.posX -= 1
         else:
             self.player.move(57, 0)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
+            self.isDst(self.posX, self.posY)
 
     def upSide(self):
         self.posY -= 1
@@ -100,8 +110,7 @@ class Level3Page(tk.Frame):
             self.posY += 1
         else:
             self.player.move(0, -57)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
+            self.isDst(self.posX, self.posY)
 
     def downSide(self):
         self.posY += 1
@@ -109,12 +118,56 @@ class Level3Page(tk.Frame):
             self.posY -= 1
         else:
             self.player.move(0, 57)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
+            self.isDst(self.posX, self.posY)
 
     def isDst(self, x, y):
         if x == self.dstX and y == self.dstY:
+            fp2GraphImage(self.rawdataFilename[:-11] + 'Biomarkers.txt')
+            self.controller.show_frame("CompletePage", 180 - self.remaining)
             return True
+
+    # 제한시간 정의
+    def countdown(self, remaining=None):
+        self.canvas.delete('ctime')
+        if remaining is not None:
+            self.remaining = remaining
+
+        if int(self.remaining) <= 0:
+            self.controller.show_frame("FailPage")
+        else:
+            # 170초일때부터 processing start
+            if int(self.remaining) == 170:
+                self.processing()
+
+            self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
+                                        font=("Helvetica", 70, 'bold'), tags=('ctime'))
+            self.remaining = self.remaining - 1
+            f = open('factory/image/play_time.txt', 'w+t')
+            Global.count_time += 1
+            playTxt = str(self.remaining)
+            f.write(playTxt)
+            f.close()
+            self.after(1000, self.countdown)
+
+    def rawdataPath(self):
+        self.rawdataFilename = filedialog.askopenfilename(initialdir="/", title="Select file",
+                                              filetypes=(("text files", "*.txt"),
+                                                         ("all files", "*.*")))
+        self.countdown(180)
+
+    def processing(self):
+        result = p300Processing2(self.rawdataFilename)
+        if  result == 'up':
+            self.upSide()
+        elif result == 'down':
+            self.downSide()
+        elif result == 'left':
+            self.leftSide()
+        elif result == 'right':
+            self.rightSide()
+        else:   # 예외처리
+            return
+        self.after(10000, self.processing)
 
 class MoveObject:
     def __init__(self, canvas, item):

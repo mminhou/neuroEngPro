@@ -1,7 +1,4 @@
 from module import *
-from datetime import datetime
-from completePage import *
-from tkinter import filedialog
 from processing import *
 
 class Global():
