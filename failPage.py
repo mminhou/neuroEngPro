@@ -17,7 +17,7 @@ class FailPage(tk.Frame):
         # self.image = self.canvas.create_image(740, 500, image=self.graphWall)
 
         # Previous Button
-        backButton = tk.Button(self, text="go homepage",
+        backButton = tk.Button(self, text="go home",
                                font=("Helvetica", 80, 'bold'),
                                borderwidth=0, highlightthickness=0,
                                command=lambda: controller.show_frame("IntroPage"))
