@@ -34,7 +34,7 @@ class Level1Page(tk.Frame):
         # Level1 Map
         self.gameMap = [
             [0, 0, 1, 3],
-            [0, 1, 1, 0],
+            [0, 1, 1, 1],
             [1, 1, 0, 0],
             [2, 1, 0, 0],
         ]
@@ -112,9 +112,9 @@ class Level1Page(tk.Frame):
             self.posX += 1
         else:
             self.player.move(-170, 0)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
-                self.controller.show_frame("CompletePage", 180-self.remaining)
+            self.isDst(self.posX, self.posY)
+                # print("Destination!")
+                # self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def rightSide(self):
         self.posX += 1
@@ -122,9 +122,9 @@ class Level1Page(tk.Frame):
             self.posX -= 1
         else:
             self.player.move(170, 0)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
-                self.controller.show_frame("CompletePage", 180-self.remaining)
+            self.isDst(self.posX, self.posY)
+                # print("Destination!")
+                # self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def upSide(self):
         self.posY -= 1
@@ -132,9 +132,9 @@ class Level1Page(tk.Frame):
             self.posY += 1
         else:
             self.player.move(0, -170)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
-                self.controller.show_frame("CompletePage", 180-self.remaining)
+            self.isDst(self.posX, self.posY)
+                # print("Destination!")
+                # self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def downSide(self):
         self.posY += 1
@@ -142,12 +142,17 @@ class Level1Page(tk.Frame):
             self.posY -= 1
         else:
             self.player.move(0, 170)
-            if self.isDst(self.posX, self.posY):
-                print("Destination!")
-                self.controller.show_frame("CompletePage", 180-self.remaining)
+            self.isDst(self.posX, self.posY)
+                # print("Destination!")
+                # self.controller.show_frame("CompletePage", 180-self.remaining)
 
     def isDst(self, x, y):
         if x == self.dstX and y == self.dstY:
+            print("Destination!")
+            print(180 - self.remaining)
+            # print(self.rawdataFilename[:-11]+'Fp2_FFT.txt', 180 - self.remaining)
+            fp2GraphImage(self.rawdataFilename[:-11]+'Biomarkers.txt')
+            self.controller.show_frame("CompletePage", 180 - self.remaining)
             # print(180-self.remaining)
             # CompletePage.time = 180-self.remaining
             # self.controller.show_frame["CompletePage"].time = 180-self.remaining
@@ -176,9 +181,24 @@ class Level1Page(tk.Frame):
         self.rawdataFilename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                               filetypes=(("text files", "*.txt"),
                                                          ("all files", "*.*")))
-        print(self.rawdataFilename)
-        print(self.rawdataFilename[:-11]+'Fp2_FFT.txt')
-        # p300Processing(self.rawdataFilename)
+        self.countdown(180)
+        # time.sleep(10)
+        # issues : 첫데이터 버려야함 -> time.sleep() 방법은 not recommend -> timer가 정상작동 X
+        self.processing()
+
+    def processing(self):
+        result = p300Processing2(self.rawdataFilename)
+        if  result == 'up':
+            self.upSide()
+        elif result == 'down':
+            self.downSide()
+        elif result == 'left':
+            self.leftSide()
+        elif result == 'right':
+            self.rightSide()
+        else:   # 예외처리
+            return
+        self.after(10000, self.processing)
 
 
 class MoveObject:
