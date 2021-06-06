@@ -5,8 +5,8 @@ class GraphPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
+        self.graphWall = tk.PhotoImage(file='factory/image/result.png')
 
-        self.graphWall = tk.PhotoImage(file='factory/image/graphSampleImage2.png')
         # Wallpaper
         self.canvas = tk.Canvas(self, width=800, height=600, bg='white')
         self.canvas.pack(fill="both", expand=True)
@@ -25,10 +25,15 @@ class GraphPage(tk.Frame):
                                command=lambda: controller.show_frame("IntroPage"))
         self.canvas.create_window(1375, 60, window=backButton)
 
+        # Update Button
+        self.updateBtn = tk.PhotoImage(file='factory/image/exitButton.png')
+        updateButton = tk.Button(self, text='update', font=("Helvetica", 70, 'bold'),
+                               borderwidth=0, highlightthickness=0,
+                               command=lambda: self.change_photo())
+        self.canvas.create_window(750, 100, window=updateButton)
 
-
-        # label = tk.Label(self, text="This is Graph Page", font=controller.title_font)
-        # label.pack(side="top", fill="x", pady=10)
-        # button = tk.Button(self, text="Go to the start page",
-        #                    command=lambda: controller.show_frame("IntroPage"))
-        # button.pack()
+    def change_photo(self):
+        filename = "factory/image/result.png"
+        imageFile = Image.open(filename)
+        self.photo = ImageTk.PhotoImage(imageFile)
+        self.canvas.itemconfig(self.image, image=self.photo)
