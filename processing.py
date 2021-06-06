@@ -257,7 +257,7 @@ def fp2GraphImage(filePath):
 
     middle_x = [(a + b) / 2 for (a, b) in zip(X_TOTAL, X_CONCEN)]
     ax.set_xticks(middle_x)
-    ax.set_xticklabels(tailResult['Time'][4:])
+    ax.set_xticklabels(tailResult['Time'])
     plt.savefig('factory/image/result.png')
 
     # plt.show()
