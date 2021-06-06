@@ -17,13 +17,6 @@ class Level1Page(tk.Frame):
         self.nogoImage = tk.PhotoImage(file='factory/image/nogo1.png')
         self.exitImage = tk.PhotoImage(file='factory/image/exit1.png')
 
-        def min(self):
-            now1 = datetime.now()
-            return now1.minute
-        def sec(self):
-            now1_ = datetime.now()
-            return now1_.second
-
         # Level1 Canvas
         self.canvas = tk.Canvas(self, width=1600, height=1200)
         self.canvas.pack()
@@ -87,10 +80,11 @@ class Level1Page(tk.Frame):
         setPathButton = tk.Button(self, text="PATH", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
                               command=lambda: self.rawdataPath())
         self.canvas.create_window(60, 100, window=setPathButton, anchor="nw")
-        # Path Button
-        startButton = tk.Button(self, text="START", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
-                                  command=lambda: self.countdown(5))
-        self.canvas.create_window(60, 210, window=startButton, anchor="nw")
+
+        # Path Button -> deleted
+        # startButton = tk.Button(self, text="START", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
+        #                           command=lambda: self.countdown(5))
+        # self.canvas.create_window(60, 210, window=startButton, anchor="nw")
 
 
     def isCollide(self):
@@ -167,6 +161,10 @@ class Level1Page(tk.Frame):
         if int(self.remaining) <= 0:
             self.controller.show_frame("FailPage")
         else:
+            # 170초일때부터 processing start
+            if int(self.remaining) == 170:
+                self.processing()
+
             self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
                                         font=("Helvetica", 70, 'bold'), tags=('ctime'))
             self.remaining = self.remaining - 1
@@ -182,9 +180,6 @@ class Level1Page(tk.Frame):
                                               filetypes=(("text files", "*.txt"),
                                                          ("all files", "*.*")))
         self.countdown(180)
-        # time.sleep(10)
-        # issues : 첫데이터 버려야함 -> time.sleep() 방법은 not recommend -> timer가 정상작동 X
-        self.processing()
 
     def processing(self):
         result = p300Processing2(self.rawdataFilename)
