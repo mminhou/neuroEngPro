@@ -17,30 +17,20 @@ class StartPage(tk.Frame):
         self.canvas.pack(fill="both", expand=True)
         self.image = self.canvas.create_image(740, 500, image=self.wall)
 
-        # Fp2 filePath Button -> 일단 rawData
-        fp2Button = tk.Button(self, text="FP2", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
-                              command=lambda: self.rawdataPath())
-        self.canvas.create_window(450, 100, window=fp2Button, anchor="nw")
-
-        # Biomarkers filePath Button
-        # biomarkersButton = tk.Button(self, text="BIO", font=("Helvetica", 80, 'bold'), borderwidth=0, highlightthickness=0,
-        #                       command=lambda: self.path())
-        # self.canvas.create_window(850, 100, window=biomarkersButton, anchor="nw")
-
         # Level2 Button
         level1Button = tk.Button(self, image=self.level1Btn, borderwidth=0, highlightthickness=0,
-                                command=lambda: [self.rawdataPath(), controller.show_frame("Level1Page")])
-        self.canvas.create_window(310, 490, window=level1Button)
+                                command=lambda: [controller.show_frame("Level1Page")])
+        self.canvas.create_window(310, 430, window=level1Button)
 
         # Level3 Button
         level2Button = tk.Button(self, image=self.level2Btn, borderwidth=0, highlightthickness=0,
                                    command=lambda: controller.show_frame("Level2Page"))
-        self.canvas.create_window(710, 490, window=level2Button)
+        self.canvas.create_window(710, 430, window=level2Button)
 
         # Level1 Button
         level3Button = tk.Button(self, image=self.level3Btn, borderwidth=0, highlightthickness=0,
                                    command=lambda: controller.show_frame("Level3Page"))
-        self.canvas.create_window(1110, 490, window=level3Button)
+        self.canvas.create_window(1110, 430, window=level3Button)
 
         # Exit Button
         # self.graphBtn = self.graphBtn.subsample(4, 4) # Resizing button
