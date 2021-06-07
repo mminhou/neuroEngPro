@@ -79,7 +79,7 @@ class Level3Page(tk.Frame):
                                   highlightthickness=0,
                                   command=lambda: self.rawdataPath())
         self.canvas.create_window(60, 100, window=setPathButton, anchor="nw")
-        
+
     def isCollide(self):
         if self.posX < 0:   return True
         if self.posX >= 12:  return True
@@ -136,7 +136,7 @@ class Level3Page(tk.Frame):
             self.controller.show_frame("FailPage")
         else:
             # 170초일때부터 processing start
-            if int(self.remaining) == 170:
+            if int(self.remaining) == 164:
                 self.processing()
 
             self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
