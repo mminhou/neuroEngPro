@@ -168,25 +168,25 @@ def p300Processing2(filePath):
     extractData['Time'] = extractData['Time'].str[5:7].astype('float') * 60 + extractData['Time'].str[8:14].astype('float')
     last = float(extractData['Time'].iloc[-1])
     print(last)
-    dataCondition = extractData['Time'].astype('float') > last - 10
+    dataCondition = extractData['Time'].astype('float') > last - 6
     extractData = extractData[dataCondition]
 
-    leftCondition = extractData['Time'] < last - 2.5
+    leftCondition = extractData['Time'] < last - 1.5
     leftSide = extractData[leftCondition]
     left = leftSide['EEG_Fp2'].mean()
     print(leftSide['EEG_Fp2'].mean())
 
-    rightCondition = extractData['Time'].between(last - 5, last - 2.5)
+    rightCondition = extractData['Time'].between(last - 3, last - 1.5)
     rightSide = extractData[rightCondition]
     right = rightSide['EEG_Fp2'].mean()
     print(rightSide['EEG_Fp2'].mean())
 
-    upCondition = extractData['Time'].between(last - 7.5, last - 5)
+    upCondition = extractData['Time'].between(last - 4.5, last - 3)
     upSide = extractData[upCondition]
     up = upSide['EEG_Fp2'].mean()
     print(upSide['EEG_Fp2'].mean())
 
-    downCondition = extractData['Time'].between(last - 10, last - 7.5)
+    downCondition = extractData['Time'].between(last - 6, last - 4.5)
     downSide = extractData[downCondition]
     down = downSide['EEG_Fp2'].mean()
     print(downSide['EEG_Fp2'].mean())
