@@ -28,10 +28,10 @@ class GraphPage(tk.Frame):
 
         ''' Update Button '''
         self.updateBtn = tk.PhotoImage(file='factory/image/exitButton.png')
-        updateButton = tk.Button(self, text='update', font=("Helvetica", 70, 'bold'),
+        updateButton = tk.Button(self, text='update', font=("Helvetica", 50, 'bold'),
                                borderwidth=0, highlightthickness=0,
                                command=lambda: self.change_photo())
-        self.canvas.create_window(750, 100, window=updateButton)
+        self.canvas.create_window(850, 100, window=updateButton)
 
     def change_photo(self):
         ''' If updating -> change graph image '''
