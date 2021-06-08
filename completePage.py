@@ -1,5 +1,4 @@
 from module import *
-import math
 
 class CompletePage(tk.Frame):
     ''' CompletePage '''
