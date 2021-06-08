@@ -1,22 +1,19 @@
 from module import *
-import math
 
 class FailPage(tk.Frame):
+    ''' FailPage '''
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        # Wallpaper
+        ''' Fail Wallpaper'''
         self.canvas = tk.Canvas(self, width=1600, height=1200, bg='white')
         self.canvas.pack(fill="both", expand=True)
 
-        # Title
+        ''' Fail Title '''
         self.canvas.create_text(700, 200, text="Time's Up", font=("Helvetica", 80, 'bold'), fill="red")
 
-        # Graph Image
-        # self.image = self.canvas.create_image(740, 500, image=self.graphWall)
-
-        # Go Home Button
+        ''' Go Home(IntroPage) Button '''
         homeButton = tk.Button(self, text="go home",
                                font=("Helvetica", 80, 'bold'),
                                borderwidth=0, highlightthickness=0,
