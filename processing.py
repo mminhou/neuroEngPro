@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
@@ -107,11 +108,20 @@ def fp2GraphImage(filePath, srcTime):
 
     ''' read Biomarkers.txt '''
     bioData = pd.read_csv(BIOMARKERS_FILENAME, sep="\t", encoding='cp949')
+    ''' 시간 format의 변형 -> 분*60 + 초의 형태 '''
+    bioData['Time'] = bioData['Time'].str[-10:-8].astype('float') * 60 + bioData['Time'].str[-7:].astype('float')
+    ''' 마지막 시간 추출 '''
+    lastTime = bioData['Time'].iloc[-1]
+    ''' Graph를 그리기위한 Data 추출 (실행시간 동안의 데이터를 뽑기위해 [마지막시간 - 실행한시간]을 해준다.) '''
+    condition = bioData['Time'] > lastTime - srcTime
+    bioData = bioData[condition]    # condition time에 부합하는 data만 추출해서 재정의
+
     ''' graph x position naming 
         [21:23] = month
         [24:26] = day
         [30] = min
         [32:34] = sec
+        -> 이것도 뒤에서 가져오는식으로 바꿔야될듯?
     '''
     exeTime = BIOMARKERS_FILENAME[21:23] + '/' + BIOMARKERS_FILENAME[24:26] + ' ' + BIOMARKERS_FILENAME[30] + ':' + BIOMARKERS_FILENAME[32:34]
 
