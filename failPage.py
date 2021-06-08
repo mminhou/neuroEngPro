@@ -11,12 +11,12 @@ class FailPage(tk.Frame):
         self.canvas.pack(fill="both", expand=True)
 
         ''' Fail Title '''
-        self.canvas.create_text(700, 200, text="Time's Up", font=("Helvetica", 80, 'bold'), fill="red")
+        self.canvas.create_text(700, 200, text="Time's Up", font=("Helvetica", 60, 'bold'), fill="red")
 
         ''' Go Home(IntroPage) Button '''
-        homeButton = tk.Button(self, text="go home",
-                               font=("Helvetica", 80, 'bold'),
+        homeButton = tk.Button(self, text="Go home",
+                               font=("Helvetica", 50, 'bold'),
                                borderwidth=0, highlightthickness=0,
                                command=lambda: controller.show_frame("IntroPage"))
-        self.canvas.create_window(700, 300, window=homeButton)
+        self.canvas.create_window(700, 400, window=homeButton)
 
