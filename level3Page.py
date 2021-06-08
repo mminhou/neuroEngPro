@@ -156,7 +156,7 @@ class Level3Page(tk.Frame):
             print("Destination!")
             self.complete = True
             ''' Call fp2GraphImage function for drawing graph '''
-            fp2GraphImage(self.rawdataFilename[:-11] + 'Biomarkers.txt')
+            fp2GraphImage(self.rawdataFilename[:-11] + 'Biomarkers.txt', 300 - self.remaining)
             ''' Switch frame -> completePage '''
             self.controller.show_frame("CompletePage")
             return True
