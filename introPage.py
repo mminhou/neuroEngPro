@@ -9,7 +9,7 @@ class IntroPage(tk.Frame):
         ''' Intro Wallpaper '''
         self.canvas = tk.Canvas(self, width=1200, height=1000)
         self.canvas.pack(fill="both", expand=True)
-        ''' sequence For gif process -> animating gif images '''
+        ''' Sequence for gif process -> animating gif images '''
         self.sequence = [ImageTk.PhotoImage(img) for img in ImageSequence.Iterator(
             Image.open(r'factory/image/original2.gif')
         )]
