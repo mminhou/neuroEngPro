@@ -12,18 +12,18 @@ class CompletePage(tk.Frame):
         self.canvas.pack(fill="both", expand=True)
 
         ''' Complete Title '''
-        self.canvas.create_text(700, 200, text="Clear!", font=("Helvetica", 80, 'bold'), fill="Red")
+        self.canvas.create_text(700, 200, text="Clear!", font=("Helvetica", 60, 'bold'), fill="Red")
 
         ''' Show paly Time txt  '''
-        self.canvas.create_text(700, 300, text="Play Time >> press 'a' key", font=("Helvetica", 70, 'bold'), fill='Green')
+        self.canvas.create_text(700, 300, text="Play Time >> press 'a' key", font=("Helvetica", 50, 'bold'), fill='Green')
         self.canvas.bind('<a>', lambda _: self.read_txt())
 
         '''  Go Home(Intro Button) Button '''
         homeButton = tk.Button(self, text="go home",
-                               font=("Helvetica", 80, 'bold'),
+                               font=("Helvetica", 50, 'bold'),
                                borderwidth=0, highlightthickness=0,
                                command=lambda: controller.show_frame("IntroPage"))
-        self.canvas.create_window(700, 500, window=homeButton)
+        self.canvas.create_window(700, 600, window=homeButton)
 
     def read_txt(self):
         ''' read play_time.txt '''
