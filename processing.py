@@ -68,22 +68,22 @@ def p300Processing2(filePath):
     extractData = extractData[dataCondition]
 
     ''' 1.5초 전의 데이터 -> down '''
-    downCondition = extractData['Time'] < last - 1.5
+    downCondition = extractData['Time'] < last - 0.5
     downSide = extractData[downCondition]
     down = downSide['EEG_Fp2'].mean()
     print(downSide['EEG_Fp2'].mean())
     ''' 3 ~ 1.5초 전의 데이터 -> up '''
-    upCondition = extractData['Time'].between(last - 3, last - 1.5)
+    upCondition = extractData['Time'].between(last - 2, last - 1.5)
     upSide = extractData[upCondition]
     up = upSide['EEG_Fp2'].mean()
     print(upSide['EEG_Fp2'].mean())
     ''' 4.5 ~ 3초 전의 데이터 -> right '''
-    rightCondition = extractData['Time'].between(last - 4.5, last - 3)
+    rightCondition = extractData['Time'].between(last - 3.5, last - 3)
     rightSide = extractData[rightCondition]
     right = rightSide['EEG_Fp2'].mean()
     print(rightSide['EEG_Fp2'].mean())
     ''' 6 ~ 4.5초 전의 데이터 -> left '''
-    leftCondition = extractData['Time'].between(last - 6, last - 4.5)
+    leftCondition = extractData['Time'].between(last - 5, last - 4.5)
     leftSide = extractData[leftCondition]
     left = leftSide['EEG_Fp2'].mean()
     print(leftSide['EEG_Fp2'].mean())
@@ -112,7 +112,7 @@ def fp2GraphImage(filePath, srcTime):
     bioData['Time'] = bioData['Time'].str[-10:-8].astype('float') * 60 + bioData['Time'].str[-7:].astype('float')
     ''' 마지막 시간 추출 '''
     lastTime = bioData['Time'].iloc[-1]
-    ''' Graph를 그리기위한 Data 추출 (실행시간 동안의 데이터를 뽑기위해 [마지막시간 - 실행한시간]을 해준다.) '''
+    ''' Graph를 그리기위한 Data 추출 (실행시간 동안의 데이터를 뽑기위해 [마지막시간 - 실행한시간] 보다 큰 Time 을 조건으로 잡아준다.) '''
     condition = bioData['Time'] > lastTime - srcTime
     bioData = bioData[condition]    # condition time에 부합하는 data만 추출해서 재정의
 
