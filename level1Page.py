@@ -171,8 +171,8 @@ class Level1Page(tk.Frame):
             if int(self.remaining) == 2984:
                 self.processing()
 
-            self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
-                                        font=("Helvetica", 70, 'bold'), tags=('ctime'))
+            # self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
+            #                             font=("Helvetica", 70, 'bold'), tags=('ctime'))
             self.remaining = self.remaining - 1
             f = open('factory/image/play_time.txt', 'w+t')
             Global.count_time += 1
