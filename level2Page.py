@@ -173,7 +173,7 @@ class Level2Page(tk.Frame):
             self.controller.show_frame("FailPage")
         else:
             ''' 영상의 margin 10s와 p300 화살표 한 cycle(6s)이 지난 후 부터 processing start '''
-            if int(self.remaining) == 164:
+            if int(self.remaining) == 2984:
                 self.processing()
 
             # self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
