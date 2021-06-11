@@ -36,3 +36,5 @@
     * fixed timer
     * path, start Btn added each levelpage
 ---
+* v 2 ( ~ 21. 6. 11. )
+    * final version
