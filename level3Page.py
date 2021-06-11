@@ -26,12 +26,11 @@ class Level3Page(tk.Frame):
 
         ''' Level3 Map '''
         self.gameMap = [
-            [0, 0, 1, 1, 1, 3],
-            [0, 1, 1, 0, 0, 0],
-            [0, 1, 1, 0, 0, 0],
-            [0, 1, 1, 0, 0, 0],
-            [1, 1, 1, 1, 1, 1],
-            [2, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 3],
+            [0, 1, 1, 0, 0],
+            [0, 1, 1, 0, 0],
+            [0, 1, 1, 0, 0],
+            [2, 1, 1, 0, 0]
         ]
 
         ''' Initial position '''
@@ -40,23 +39,23 @@ class Level3Page(tk.Frame):
         self.complete = False
         self.posX = self.posY = 0
 
-        for r in range(6):
-            for c in range(6):
+        for r in range(5):
+            for c in range(5):
                 if self.gameMap[r][c] == 1:
                     ''' Path '''
-                    self.canvas.create_image(c * 115 + 410, r * 115 + 170, image=self.goImage)
+                    self.canvas.create_image(c * 142 + 410, r * 142 + 170, image=self.goImage)
                 elif self.gameMap[r][c] == 0:
                     ''' Non Path '''
-                    self.canvas.create_image(c * 115 + 410, r * 115 + 170, image=self.nogoImage)
+                    self.canvas.create_image(c * 142 + 410, r * 142 + 170, image=self.nogoImage)
                 elif self.gameMap[r][c] == 3:
                     ''' Destination '''
-                    self.canvas.create_image(c * 115 + 410, r * 115 + 170, image=self.exitImage)
+                    self.canvas.create_image(c * 142 + 410, r * 142 + 170, image=self.exitImage)
                     self.dstX = c
                     self.dstY = r
                 elif self.gameMap[r][c] == 2:
                     ''' Player '''
-                    self.srcX = c * 115 + 410
-                    self.srcY = r * 115 + 170
+                    self.srcX = c * 142 + 410
+                    self.srcY = r * 142 + 170
                     self.posX = c
                     self.posY = r
 
@@ -83,7 +82,7 @@ class Level3Page(tk.Frame):
         self.canvas.create_window(1375, 60, window=backButton)
 
         ''' Path Button '''
-        setPathButton = tk.Button(self, text="PATH", font=("Helvetica", 80, 'bold'), borderwidth=0,
+        setPathButton = tk.Button(self, text="PATH", font=("Helvetica", 50, 'bold'), borderwidth=0,
                                   highlightthickness=0,
                                   command=lambda: self.rawdataPath())
         self.canvas.create_window(60, 100, window=setPathButton, anchor="nw")
@@ -92,11 +91,11 @@ class Level3Page(tk.Frame):
         ''' If there are block (gameMap range condition check) -> True, else False '''
         if self.posX < 0:
             return True
-        if self.posX >= 6:
+        if self.posX >= 5:
             return True
         if self.posY < 0:
             return True
-        if self.posY >= 6:
+        if self.posY >= 5:
             return True
         if self.gameMap[self.posY][self.posX] == 0:
             return True
@@ -113,7 +112,7 @@ class Level3Page(tk.Frame):
                 Play moving from current to (currentX-115, currentY)
                 Check arrived in destination
             '''
-            self.player.move(-115, 0)
+            self.player.move(-142, 0)
             self.isDst(self.posX, self.posY)
 
     def rightSide(self):
@@ -124,7 +123,7 @@ class Level3Page(tk.Frame):
             self.posX -= 1
         else:
             ''' Play moving from current to (currentX+115, currentY)'''
-            self.player.move(115, 0)
+            self.player.move(142, 0)
             self.isDst(self.posX, self.posY)
 
     def upSide(self):
@@ -135,7 +134,7 @@ class Level3Page(tk.Frame):
             self.posY += 1
         else:
             ''' Play moving from current to (currentX, currentY-115)'''
-            self.player.move(0, -115)
+            self.player.move(0, -142)
             self.isDst(self.posX, self.posY)
 
     def downSide(self):
@@ -146,7 +145,7 @@ class Level3Page(tk.Frame):
             self.posY -= 1
         else:
             ''' Play moving from current to (currentX, currentY+115)'''
-            self.player.move(0, 115)
+            self.player.move(0, 142)
             self.isDst(self.posX, self.posY)
 
     def isDst(self, x, y):
@@ -156,7 +155,7 @@ class Level3Page(tk.Frame):
             print("Destination!")
             self.complete = True
             ''' Call fp2GraphImage function for drawing graph '''
-            fp2GraphImage(self.rawdataFilename[:-11] + 'Biomarkers.txt', 300 - self.remaining)
+            fp2GraphImage(self.rawdataFilename[:-11] + 'Biomarkers.txt', 3000 - self.remaining)
             ''' Switch frame -> completePage '''
             self.controller.show_frame("CompletePage")
             return True
@@ -173,7 +172,7 @@ class Level3Page(tk.Frame):
             self.controller.show_frame("FailPage")
         else:
             ''' 영상의 margin 10s와 p300 화살표 한 cycle(6s)이 지난 후 부터 processing start '''
-            if int(self.remaining) == 284:
+            if int(self.remaining) == 164:
                 self.processing()
 
             self.canvas.create_text(1020, 60, text="%d:%d" % (int(self.remaining / 60), int(self.remaining % 60)),
@@ -191,8 +190,8 @@ class Level3Page(tk.Frame):
         self.rawdataFilename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                               filetypes=(("text files", "*.txt"),
                                                          ("all files", "*.*")))
-        ''' start timer(300s) after path setting '''
-        self.countdown(300)
+        ''' start timer(3000s) after path setting '''
+        self.countdown(3000)
 
     def processing(self):
         ''' Processing start by Rawdata.txt '''
