@@ -30,6 +30,6 @@ class CompletePage(tk.Frame):
         self.f = open('factory/image/play_time.txt', 'r+t')
         self.a = self.f.readline()
         self.b = (int)(self.a)
-        self.print_time = 180 - self.b
+        self.print_time = 3000 - self.b
         self.k = "플레이 시간 : " + str(self.print_time)
         self.canvas.create_text(730, 400, text=self.k, font=('Helvetica', 30, "bold"))
