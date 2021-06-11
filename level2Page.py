@@ -26,7 +26,7 @@ class Level2Page(tk.Frame):
 
         ''' Level2 Map '''
         self.gameMap = [
-            [0, 0, 1, 3],
+            [0, 1, 1, 3],
             [0, 1, 1, 1],
             [1, 1, 0, 0],
             [2, 1, 0, 0]
