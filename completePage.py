@@ -16,6 +16,7 @@ class CompletePage(tk.Frame):
 
         ''' Show paly Time txt  '''
         self.canvas.create_text(700, 300, text="Play Time >> press 'a' key", font=("Helvetica", 50, 'bold'), fill='Green')
+        self.playText = self.canvas.create_text(730, 400, text=' ', font=('Helvetica', 30, "bold"))
         self.canvas.bind('<a>', lambda _: self.read_txt())
 
         '''  Go Home(Intro Button) Button '''
@@ -32,4 +33,4 @@ class CompletePage(tk.Frame):
         self.b = (int)(self.a)
         self.print_time = 3000 - self.b
         self.k = "플레이 시간 : " + str(self.print_time)
-        self.canvas.create_text(730, 400, text=self.k, font=('Helvetica', 30, "bold"))
+        self.canvas.itemconfig(self.playText, text=self.k)
