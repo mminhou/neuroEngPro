@@ -194,8 +194,8 @@ class Level3Page(tk.Frame):
         self.countdown(3000)
 
     def processing(self):
-        ''' Checking on isDst '''
-        if self.isDst(self.posX, self.posY):
+        ''' Checking on complete '''
+        if self.complete:
             return
         ''' Processing start by Rawdata.txt '''
         result = p300Processing2(self.rawdataFilename)
